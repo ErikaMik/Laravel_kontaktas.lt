@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::resource('advert', 'AdvertController');
+
+Route::resource('category', 'CategoryController');
