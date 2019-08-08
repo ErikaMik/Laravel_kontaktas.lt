@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Advert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AdvertController extends Controller
 {
@@ -24,7 +26,7 @@ class AdvertController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where('active', 1)->get();
         $data['categories'] = $categories;
         //dd($categories); debuginimas
         return view('adverts.create', $data);
@@ -38,7 +40,16 @@ class AdvertController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $advert = new Advert();
+        $advert->title = $request->title;
+        $advert->content = $request->content_text;
+        $advert->category_id = $request->category_id;
+        $advert->city_id = 1;
+        $advert->user_id = 1;
+        $advert->price = $request->price;
+        $advert->image = $request->image;
+        $advert->slug = Str::slug($request->title, '-');
+        $advert->save();
     }
 
     /**
@@ -49,7 +60,9 @@ class AdvertController extends Controller
      */
     public function show($id)
     {
-        //
+        $advert = Advert::find($id);
+        $data['advert'] = $advert;
+        return view('adverts.single', $data);
     }
 
     /**
@@ -60,7 +73,13 @@ class AdvertController extends Controller
      */
     public function edit($id)
     {
-        //
+        //uzkrauna forma editinimui
+        $advert = Advert::find($id);
+        $categories = Category::where('active', 1)->get();
+        $data['advert'] = $advert;
+        $data['categories'] = $categories;
+
+        return view('adverts.edit', $data);
     }
 
     /**
@@ -72,7 +91,19 @@ class AdvertController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //Uzkrauna i duomenu baze
+        $advert = Advert::find($id);
+        $advert->title = $request->title;
+        $advert->content = $request->content_text;
+        $advert->category_id = $request->category_id;
+        $advert->city_id = 1;
+        $advert->user_id = 1;
+        $advert->price = $request->price;
+        $advert->image = $request->image;
+        $advert->slug = Str::slug($request->title, '-');
+        $advert->save();
+        $data['advert'] = $advert;
+        return view('adverts.single', $data);
     }
 
     /**
@@ -83,6 +114,8 @@ class AdvertController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $advert = Advert::find($id);
+        $advert->active = 0;
+        $advert->save();
     }
 }

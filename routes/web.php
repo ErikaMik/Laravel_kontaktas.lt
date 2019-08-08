@@ -15,8 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('home', 'HomeController');
+
 Auth::routes();
 
 Route::resource('advert', 'AdvertController');
 
 Route::resource('category', 'CategoryController');
+

@@ -10,11 +10,11 @@
                     <div class="card-body">
                         <form method="post" action="{{route('category.store')}}">
                             @csrf {{--neleidzia submitint formos is kito saito--}}
-                            <input name="title" type="text" class="form-control" placeholder="Pavadinimas">
-                            <select name="parent_id" class="form-control">
+                            <input name="title" type="text" class="form-control mt-2" placeholder="Pavadinimas">
+                            <select name="parent_id" class="form-control mt-2">
                                 <option value="0">-----</option>
                             </select>
-                            <button class="btn alert-success">Create</button>
+                            <button class="btn alert-success mt-2">Create</button>
                         </form>
                     </div>
                 </div>
