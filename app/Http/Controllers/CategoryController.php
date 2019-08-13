@@ -51,7 +51,9 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $data['category'] = Category::find($id);
+
+        return view('category.single', $data);
     }
 
     /**

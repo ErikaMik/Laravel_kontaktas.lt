@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Advert;
+use App\Comments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -40,16 +41,18 @@ class AdvertController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
         $advert = new Advert();
         $advert->title = $request->title;
         $advert->content = $request->content_text;
         $advert->category_id = $request->category_id;
         $advert->city_id = 1;
-        $advert->user_id = 1;
+        $advert->user_id = $user->id;
         $advert->price = $request->price;
         $advert->image = $request->image;
         $advert->slug = Str::slug($request->title, '-');
         $advert->save();
+        return redirect()->action('AdvertController@show', $advert->id);
     }
 
     /**
@@ -62,6 +65,9 @@ class AdvertController extends Controller
     {
         $advert = Advert::find($id);
         $data['advert'] = $advert;
+
+        $data['comments'] = Comments::all();
+
         return view('adverts.single', $data);
     }
 
@@ -92,12 +98,13 @@ class AdvertController extends Controller
     public function update(Request $request, $id)
     {
         //Uzkrauna i duomenu baze
+        $user = auth()->user();
         $advert = Advert::find($id);
         $advert->title = $request->title;
         $advert->content = $request->content_text;
         $advert->category_id = $request->category_id;
         $advert->city_id = 1;
-        $advert->user_id = 1;
+        $advert->user_id = $user->id;
         $advert->price = $request->price;
         $advert->image = $request->image;
         $advert->slug = Str::slug($request->title, '-');
