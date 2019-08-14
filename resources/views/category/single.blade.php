@@ -2,23 +2,33 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{$category->title}}</div>
+        <div class="row">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
 
-                    <div class="card-body">
-                        <div class="row">
-                            @foreach($category->adverts as $advert)
-                                <div class="col-3">
-                                    <h2 class="card-subtitle">{{$advert->title}}</h2>
-                                    <div class="text-center">{{$advert->content}}</div>
-                                </div>
-                            @endforeach
+            @foreach($category->adverts as $advert)
+                <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                    <div class="card">
+                        <img class="card-img-top" src="{{$advert->image}}" alt="{{$advert->slug}}">
+                        <div class="card-block">
+                            {{--<figure class="profile">--}}
+                            {{--<img src="{{ $advert-> image}}" alt="{{$advert->slug}}" width="200" height="150" class="profile-avatar" alt="">--}}
+                            {{--</figure>--}}
+                            <h4 class="card-title mt-3 pl-2 pr-2">{{$advert->title}}</h4>
+                            <div class="card-text pl-2 pr-2 pb-2">
+                                {{ $advert-> content}}
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <small>Kaina: {{ $advert-> price}} €</small>
+                            <a href="http://194.5.157.97/laravel/test/public/advert/{{$advert->slug}}" class="btn btn-dark float-right btn-sm">show</a>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
 @endsection

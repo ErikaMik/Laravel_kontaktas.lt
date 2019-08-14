@@ -2,11 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Skelbimai</div>
-                <div class="card-body">
+    <div class="row">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
@@ -14,20 +10,22 @@
                     @endif
 
                         @foreach($adverts as $advert)
-                            <div class="card">
-                                <a href="http://194.5.157.97/laravel/test/public/advert/{{$advert->id}}" class="text-body" style="text-decoration: none"><div class="card-header">{{$advert->title}}</div>
-
-                                <div class="card-body">
-                                    <div class="card-columns">Kaina: {{ $advert-> price}} €</div>
-                                    <div class="text-center"><img src="{{ $advert-> image}}" alt="{{$advert->slug}}" class="img-fluid"></div>
-                                    <div class="card-columns"><p class="text-justify">{{ $advert-> content}}</p></div>
-                                </div></a>
+                            <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                                <div class="card">
+                                    <img class="card-img-top" src="{{ $advert-> image}}" alt="{{$advert->slug}}">
+                                    <div class="card-block">
+                                        <h4 class="card-title mt-3 pl-2 pr-2">{{$advert->title}}</h4>
+                                        <div class="card-text pl-2 pr-2 pb-2">
+                                            {{ $advert-> content}}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <small>Kaina: {{ $advert-> price}} €</small>
+                                        <a href="http://194.5.157.97/laravel/test/public/advert/{{$advert->slug}}" class="btn btn-dark float-right btn-sm">show</a>
+                                    </div>
+                                </div>
                             </div>
                         @endforeach
-
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 @endsection

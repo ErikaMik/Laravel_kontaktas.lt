@@ -6,6 +6,7 @@ use App\Category;
 use App\Advert;
 use App\Comments;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AdvertController extends Controller
@@ -17,7 +18,9 @@ class AdvertController extends Controller
      */
     public function index()
     {
-        return view('adverts.index');
+        $adverts = Advert::all();
+        $data['adverts'] = $adverts;
+        return view('home', $data);
     }
 
     /**
@@ -27,10 +30,17 @@ class AdvertController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('active', 1)->get();
-        $data['categories'] = $categories;
-        //dd($categories); debuginimas
-        return view('adverts.create', $data);
+        $user = Auth::user();
+        if($user && ($user->hasRole('admin') || $user->hasRole('user')))
+        {
+            $categories = Category::where('active', 1)->get();
+            $data['categories'] = $categories;
+            //dd($categories); debuginimas
+            return view('adverts.create', $data);
+        }else{
+            return view('auth.login');
+        }
+
     }
 
     /**
@@ -50,7 +60,12 @@ class AdvertController extends Controller
         $advert->user_id = $user->id;
         $advert->price = $request->price;
         $advert->image = $request->image;
-        $advert->slug = Str::slug($request->title, '-');
+
+        $lastid = Advert::all()->last();
+        $id = $lastid->id;
+        $id = $id + 1;
+
+        $advert->slug = Str::slug($request->title, '-').'-'.$id;
         $advert->save();
         return redirect()->action('AdvertController@show', $advert->id);
     }
@@ -61,12 +76,22 @@ class AdvertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+//    public function show($id)
+//    {
+//        $advert = Advert::find($id);
+//        $data['advert'] = $advert;
+//
+//        $data['comments'] = Comments::where('active', 1)->get();
+//
+//        return view('adverts.single', $data);
+//    }
+
+    public function show(Advert $advert)
     {
-        $advert = Advert::find($id);
+        //$advert = Advert::where('slug', $slug)->first();
         $data['advert'] = $advert;
 
-        $data['comments'] = Comments::all();
+        $data['comments'] = Comments::where('active', 1)->get();
 
         return view('adverts.single', $data);
     }
@@ -109,8 +134,9 @@ class AdvertController extends Controller
         $advert->image = $request->image;
         $advert->slug = Str::slug($request->title, '-');
         $advert->save();
-        $data['advert'] = $advert;
-        return view('adverts.single', $data);
+        //$data['advert'] = $advert;
+        //return view('adverts.single', $data);
+        return redirect()->action('AdvertController@show', $advert->slug);
     }
 
     /**
@@ -124,5 +150,7 @@ class AdvertController extends Controller
         $advert = Advert::find($id);
         $advert->active = 0;
         $advert->save();
+        return redirect()->action('HomeController@index');
+
     }
 }

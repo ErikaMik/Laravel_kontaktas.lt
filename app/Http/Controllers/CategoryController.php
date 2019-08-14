@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
@@ -49,12 +50,13 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        $data['category'] = Category::find($id);
-
+        $data['category'] = $category;
         return view('category.single', $data);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

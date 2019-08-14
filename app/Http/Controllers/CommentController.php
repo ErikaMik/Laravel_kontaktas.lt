@@ -37,15 +37,19 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $comment = new Comments();
-        $comment->content = $request->content_text;
-        // User ID nesutvarkyta, dabar paduoda skelbimo autoriaus ID
-        $comment->user_id = $request->userId;
-        $comment->advert_id = $request->adId;
+//        if(!empty($comment->content)){
+            $comment->content = $request->content_text;
+            // User ID nesutvarkyta, dabar paduoda skelbimo autoriaus ID
+            $comment->user_id = $request->userId;
+            $comment->advert_id = $request->adId;
 
-        $comment->save();
+            $comment->save();
+//        }else{
+//            echo ':(';
+//        }
 
         //return redirect()->route('advert', $request->adId);
-        return redirect()->action('AdvertController@show', $request->adId);
+        return redirect()->action('AdvertController@show', $request->slug);
 
     }
 
