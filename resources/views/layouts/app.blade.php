@@ -40,18 +40,28 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
 
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{  route('home.index') }}">{{ __('Home') }}</a>
+                        </li>
+                        @role('admin')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{  route('admin.index') }}">{{ __('Admin') }}</a>
+                        </li>
+
+
+                        @endrole
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Kategorijos
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 @foreach($category as $cat => $c)
-                                    <a style="padding-left: 20px" class="dropdown-item" href="http://194.5.157.97/laravel/test/public/category/{{$c->slug}}">{{$c->title}}</a>
+                                    <a style="padding-left: 20px" class="dropdown-item" href="{{route('category.show', $c->slug)}}">{{$c->title}}</a>
                                 @endforeach
                             </div>
                         </li>
 
-                        @role('admin')
+                        @role('admin|user')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('advert.create') }}">{{ __('Kurti skelbima') }}</a>
                         </li>

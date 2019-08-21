@@ -14,9 +14,6 @@
                     <div class="card">
                         <img class="card-img-top" src="{{ $advert-> image}}" alt="{{$advert->slug}}">
                         <div class="card-block">
-                            {{--<figure class="profile">--}}
-                            {{--<img src="{{ $advert-> image}}" alt="{{$advert->slug}}" width="200" height="150" class="profile-avatar" alt="">--}}
-                            {{--</figure>--}}
                             <h4 class="card-title mt-3 pl-2 pr-2">{{$advert->title}}</h4>
                             <div class="card-text pl-2 pr-2 pb-2">
                                 {{ $advert-> content}}

@@ -15,8 +15,8 @@
                                     <img class="card-img-top" src="{{ $advert-> image}}" alt="{{$advert->slug}}">
                                     <div class="card-block">
                                         <h4 class="card-title mt-3 pl-2 pr-2">{{$advert->title}}</h4>
-                                        <div class="card-text pl-2 pr-2 pb-2">
-                                            {{ $advert-> content}}
+                                        <div class="card-text pl-2 pr-2 pb-2 mb-2">
+                                            {{ Str::words($advert->content, 10, '...')}}
                                         </div>
                                     </div>
                                     <div class="card-footer">

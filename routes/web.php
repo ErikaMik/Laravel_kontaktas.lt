@@ -18,8 +18,12 @@ Route::get('/', function () {
 Route::resource('home', 'HomeController');
 
 Auth::routes();
+//Route::get('advert/{id}', 'AdvertController@destroy');
 
 Route::resource('advert', 'AdvertController');
+
+
+Route::get('advert/{id}/edit', 'AdvertController@edit');
 
 Route::resource('category', 'CategoryController');
 

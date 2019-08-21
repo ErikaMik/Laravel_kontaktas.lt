@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Admin;
+use App\Advert;
+use App\Category;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -14,7 +17,18 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.admin');
+        $user = Auth::user();
+        if($user && ($user->hasRole('admin'))){
+            $adverts = Advert::all();
+            $data['adverts'] = $adverts;
+            $category = Category::where('parent_id', 2)->get();;
+            $data['category'] = $category;
+            //return view('admin', $data);
+            return view('admin.admin', $data);
+        }else{
+            return view('auth.login');
+        }
+
     }
 
     /**
@@ -44,9 +58,16 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $category = Category::where('parent_id', 2)->get();
+        //dd($category);
+        $data['category'] = $category;
+
+        $adverts = Advert::where('category_id', $category[1]->id)->get();
+
+        $data['adverts'] = $adverts;
+        return view('admin.admin', $data);
     }
 
     /**

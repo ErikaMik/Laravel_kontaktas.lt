@@ -37,12 +37,11 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $comment = new Comments();
+        $user = auth()->user();
 //        if(!empty($comment->content)){
             $comment->content = $request->content_text;
-            // User ID nesutvarkyta, dabar paduoda skelbimo autoriaus ID
-            $comment->user_id = $request->userId;
+            $comment->user_id = $user->id;
             $comment->advert_id = $request->adId;
-
             $comment->save();
 //        }else{
 //            echo ':(';

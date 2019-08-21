@@ -18,7 +18,7 @@ class AdvertController extends Controller
      */
     public function index()
     {
-        $adverts = Advert::all();
+        $adverts = Advert::where('active', 1)->get();
         $data['adverts'] = $adverts;
         return view('home', $data);
     }
@@ -67,7 +67,7 @@ class AdvertController extends Controller
 
         $advert->slug = Str::slug($request->title, '-').'-'.$id;
         $advert->save();
-        return redirect()->action('AdvertController@show', $advert->id);
+        return redirect()->action('AdvertController@show', $advert->slug);
     }
 
     /**
@@ -91,7 +91,7 @@ class AdvertController extends Controller
         //$advert = Advert::where('slug', $slug)->first();
         $data['advert'] = $advert;
 
-        $data['comments'] = Comments::where('active', 1)->get();
+        $data['comments'] = Comments::where('active', 1)->where('advert_id', $advert->id)->get();
 
         return view('adverts.single', $data);
     }
@@ -132,6 +132,7 @@ class AdvertController extends Controller
         $advert->user_id = $user->id;
         $advert->price = $request->price;
         $advert->image = $request->image;
+        $advert->active = $request->active;
         $advert->slug = Str::slug($request->title, '-');
         $advert->save();
         //$data['advert'] = $advert;
@@ -150,7 +151,9 @@ class AdvertController extends Controller
         $advert = Advert::find($id);
         $advert->active = 0;
         $advert->save();
-        return redirect()->action('HomeController@index');
-
+        $user = Auth::user();
+        if($user && ($user->hasRole('admin'))){
+            return redirect()->action('AdminController@index');
+        }else{return redirect()->action('HomeController@index');}
     }
 }

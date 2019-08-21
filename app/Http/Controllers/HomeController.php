@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $adverts = Advert::all();
+        $adverts = Advert::where('active', 1)->get();
         $data['adverts'] = $adverts;
         return view('home', $data);
     }

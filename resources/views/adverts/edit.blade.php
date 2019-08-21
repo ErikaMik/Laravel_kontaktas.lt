@@ -8,6 +8,7 @@
                     <div class="card-header">Redaguoti skelbima</div>
 
                     <div class="card-body">
+                        @role('admin|user')
                         <form method="post" action="{{route('advert.update', $advert->id)}}">
                             @method('PUT')
                             @csrf {{--neleidzia submitint formos is kito saito--}}
@@ -18,11 +19,19 @@
                             <select name="category_id" class="form-control mt-2" required>
                                 <option class="form-control">Pasirinkti kategorija</option>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}">{{$cat->title}}</option>
+                                    <option value="{{ $cat->id }}" {{($advert->category_id == $cat->id) ? 'selected':''}}>{{$cat->title}}</option>
                                 @endforeach
                             </select>
+                            <select name="active" class="form-control mt-2" required>
+                                <option class="form-control">Choose status</option>
+                                    <option value="1" selected>Active</option>
+                                    <option value="0">Disabled</option>
+                            </select>
+
                             <button class="btn alert-success mt-2">Update</button>
+
                         </form>
+                        @endrole
                     </div>
                 </div>
             </div>

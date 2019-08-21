@@ -8,10 +8,22 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div>{{$advert->title}}</div>
-                        <form method="post" action="{{route('advert.destroy', $advert->id)}}">
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-dark float-right btn-sm">Delete</button>
-                        </form>
+                        <div class="d-flex justify-content-between">
+                                @if(Auth::user()->hasRole('user') && Auth::user()->id == $advert->user_id || Auth::user()->hasRole('admin'))
+                            {{--@role('admin|user')--}}
+                                    <form method="post" action="{{url('advert/'.$advert->id.'/edit')}}">
+                                        @csrf
+                                        @method('GET')
+                                        <button type="submit" class="btn btn-dark float-right btn-sm mr-2">Edit</button>
+                                    </form>
+                                    <form method="post" action="{{action('AdvertController@destroy', $advert->id)}}">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-dark float-right btn-sm">Delete</button>
+                                    </form>
+                                @endif
+                            {{--@endrole--}}
+                        </div>
                     </div>
                 </div>
                 <div class="alert">Kategorija: {{$advert->category->title}}</div>
@@ -36,12 +48,12 @@
                     </div>
                 @endforeach
         </div>
+
         <div class="card-body col-md-8">
             <form method="post" action="{{route('comment.store')}}">
                 @csrf {{--neleidzia submitint formos is kito saito--}}
                 <textarea name="content_text" type="text" class="form-control mt-2" placeholder="Comment..."></textarea>
                 <input type="hidden" value="{{$advert->id}}" name="adId">
-                <input type="hidden" value="{{$advert->user_id}}" name="userId">
                 <input type="hidden" value="{{$advert->slug}}" name="slug">
                 <button class="btn alert-success mt-2">Comment</button>
             </form>
