@@ -24,7 +24,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Kontaktas') }}
+                    {{--{{ config('app.name', 'Kontaktas') }}--}}
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -47,20 +47,18 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{  route('admin.index') }}">{{ __('Admin') }}</a>
                         </li>
-
-
                         @endrole
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Kategorijos
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                @foreach($category as $cat => $c)
-                                    <a style="padding-left: 20px" class="dropdown-item" href="{{route('category.show', $c->slug)}}">{{$c->title}}</a>
-                                @endforeach
-                            </div>
-                        </li>
-
+                        {{--<li class="nav-item dropdown">--}}
+                            {{--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
+                                {{--Kategorijos--}}
+                            {{--</a>--}}
+                            {{--<div class="dropdown-menu" aria-labelledby="navbarDropdown">--}}
+                                {{--@foreach($category as $cat => $c)--}}
+                                    {{--<a style="padding-left: 20px" class="dropdown-item" href="{{route('category.show', $c->slug)}}">{{$c->title}}</a>--}}
+                                {{--@endforeach--}}
+                            {{--</div>--}}
+                        {{--</li>--}}
+                        @include('pages.menu.categories')
                         @role('admin|user')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('advert.create') }}">{{ __('Kurti skelbima') }}</a>
@@ -80,6 +78,8 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
+                                <span style="background-color: #ccc; color: #fff; border-radius: 50%; display: block; height: 20px; width: 20px; text-align: center; position: relative; top: -70%;
+    right: -100%"><a href="{{ route('messages.index') }}" style="text-decoration: none; color: white;">{{$messages}}</a></span>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"

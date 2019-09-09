@@ -12,10 +12,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('auth');
+//    }
 
     /**
      * Show the application dashboard.
@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $adverts = Advert::where('active', 1)->get();
+        $adverts = Advert::where('active', 1)->paginate(4);
         $data['adverts'] = $adverts;
         return view('home', $data);
     }

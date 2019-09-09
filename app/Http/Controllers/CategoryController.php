@@ -26,7 +26,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('category.create');
+        $data['categories'] = Category::all();
+        return view('category.create', $data);
     }
 
     /**
@@ -42,6 +43,7 @@ class CategoryController extends Controller
         $category->slug = Str::slug($request->title, '-');
         $category->parent_id = $request->parent_id;
         $category->save();
+        return redirect()->back()->with('message', 'Kategorija sukurta');
     }
 
     /**

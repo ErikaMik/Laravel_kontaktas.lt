@@ -22,6 +22,19 @@
                                     <option value="{{ $cat->id }}" {{($advert->category_id == $cat->id) ? 'selected':''}}>{{$cat->title}}</option>
                                 @endforeach
                             </select>
+                            <select name="attribute_id" class="form-control mt-2" required>
+                                <option class="form-control">Atributai</option>
+                                @foreach($attribute_set as $set)
+                                    <option value="{{ $set->id }}">{{$set->name}}</option>
+                                @endforeach
+                            </select>
+
+
+                            @foreach($attributes as $attribute)
+                                <input name="title" type="text" class="form-control mt-2"  placeholder="{{$attribute->attributes->name}}" value="{{ucfirst($attribute->attributes->name)}}">
+                            @endforeach
+
+
                             <select name="active" class="form-control mt-2" required>
                                 <option class="form-control">Choose status</option>
                                     <option value="1" selected>Active</option>

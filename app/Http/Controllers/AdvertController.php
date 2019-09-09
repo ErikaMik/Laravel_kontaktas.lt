@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Attribute_set;
 use App\Category;
 use App\Advert;
 use App\Comments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+
 
 class AdvertController extends Controller
 {
@@ -18,7 +20,7 @@ class AdvertController extends Controller
      */
     public function index()
     {
-        $adverts = Advert::where('active', 1)->get();
+        $adverts = Advert::active()->get();
         $data['adverts'] = $adverts;
         return view('home', $data);
     }
@@ -76,15 +78,7 @@ class AdvertController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-//    public function show($id)
-//    {
-//        $advert = Advert::find($id);
-//        $data['advert'] = $advert;
-//
-//        $data['comments'] = Comments::where('active', 1)->get();
-//
-//        return view('adverts.single', $data);
-//    }
+
 
     public function show(Advert $advert)
     {
@@ -107,8 +101,12 @@ class AdvertController extends Controller
         //uzkrauna forma editinimui
         $advert = Advert::find($id);
         $categories = Category::where('active', 1)->get();
+        $attribute_set = Attribute_set::all();
+        $data['attributes'] = $advert->attributeSet->relations;
+        
         $data['advert'] = $advert;
         $data['categories'] = $categories;
+        $data['attribute_set'] = $attribute_set;
 
         return view('adverts.edit', $data);
     }
@@ -134,6 +132,7 @@ class AdvertController extends Controller
         $advert->image = $request->image;
         $advert->active = $request->active;
         $advert->slug = Str::slug($request->title, '-');
+        $advert->attribute_set_id = $request->attribute_id;
         $advert->save();
         //$data['advert'] = $advert;
         //return view('adverts.single', $data);

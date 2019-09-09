@@ -22,8 +22,19 @@ class Advert extends Model
         return $this->hasOne('App\User', 'id', 'user_id');
     }
 
+    //Vietoj id paduodam slug
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
+    public function attributeSet()
+    {
+        return $this->hasOne('App\Attribute_set', 'id', 'attribute_set_id' );
     }
 }

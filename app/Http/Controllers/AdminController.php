@@ -19,16 +19,12 @@ class AdminController extends Controller
     {
         $user = Auth::user();
         if($user && ($user->hasRole('admin'))){
-            $adverts = Advert::all();
-            $data['adverts'] = $adverts;
-            $category = Category::where('parent_id', 2)->get();;
-            $data['category'] = $category;
-            //return view('admin', $data);
+            $data['adverts'] = Advert::all();
+            $data['categories'] = Category::all();
             return view('admin.admin', $data);
         }else{
             return view('auth.login');
         }
-
     }
 
     /**
@@ -58,16 +54,18 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($slug)
     {
-        $category = Category::where('parent_id', 2)->get();
-        //dd($category);
-        $data['category'] = $category;
+        $user = Auth::user();
+        if($user && ($user->hasRole('admin'))){
+            $data['category'] = Category::where('slug', $slug)->first();
+            $data['adverts'] = $data['category']->adverts;
+            $data['categories'] = Category::all(); //sutvarkyt kad nebutu 2
+            return view('admin.admin', $data);
+        }else{
+            return view('auth.login');
+}
 
-        $adverts = Advert::where('category_id', $category[1]->id)->get();
-
-        $data['adverts'] = $adverts;
-        return view('admin.admin', $data);
     }
 
     /**

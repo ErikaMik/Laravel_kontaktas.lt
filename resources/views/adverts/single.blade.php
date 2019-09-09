@@ -9,7 +9,7 @@
                     <div class="d-flex justify-content-between">
                         <div>{{$advert->title}}</div>
                         <div class="d-flex justify-content-between">
-                                @if(Auth::user()->hasRole('user') && Auth::user()->id == $advert->user_id || Auth::user()->hasRole('admin'))
+                                @if(Auth::user() && (Auth::user()->hasRole('user') && Auth::user()->id == $advert->user_id || Auth::user()->hasRole('admin')))
                             {{--@role('admin|user')--}}
                                     <form method="post" action="{{url('advert/'.$advert->id.'/edit')}}">
                                         @csrf

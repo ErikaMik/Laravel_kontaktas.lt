@@ -11,27 +11,24 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Adverts<span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Categories</a>
-                            <li class="nav-item dropdown">
+                            <li>
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Kategorijos
+                                    Cetgories
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    @foreach($category as $cat => $c)
+                                    @foreach($categories as $key => $c)
                                         <a style="padding-left: 20px" class="dropdown-item" href="{{route('admin.show', $c->slug)}}">{{$c->title}}</a>
                                     @endforeach
                                 </div>
-                            </li>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Users</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Cities</a>
+                                <a class="nav-link" href="{{route('city.index')}}">Cities</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('message.create')}}">Create message</a>
                             </li>
                         </ul>
                     </div>
@@ -54,7 +51,7 @@
                         <td>{{$advert->title}}</td>
                         <td width="400px">{{ Str::words($advert->content, 10, '...')}}</td>
                         <td><img src="{{$advert->image}}" width="150px"></td>
-                        <td>{{$advert->active}}</td>
+                        <td>{{($advert->active == 1) ? "Active" : "Disabled"}}</td>
                         <td>
                             <a href="{{url('advert/'.$advert->id.'/edit')}}" type="submit" role="button"  class="btn btn-dark btn-sm">
                             EDIT
@@ -66,14 +63,10 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-dark btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                             </form>
+                        </td>
                     </tr>
-
                     @endforeach
                 </table>
-
-
-
-
             </div>
         </div>
     </div>
