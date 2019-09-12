@@ -31,6 +31,9 @@
                     <div class="text-left">{{ $advert-> content}}</div>
                     <div class="card-columns mt-4">Kaina: {{ $advert->price}} €</div>
                     <div class="text-center"><img src="{{ $advert->image}}" alt="{{$advert->slug}}" class="img-fluid"></div>
+                    @foreach($attributes as $attribute)
+                        <div class="card mt-4">{{$attribute->attributes->label}}: {{$attribute->attributes->value->value}}</div>
+                    @endforeach
                 </div>
             </div>
         </div>

@@ -13,6 +13,7 @@
                             <input name="title" type="text" class="form-control mt-2"  placeholder="Pavadinimas">
                             <textarea name="content_text" type="text" class="form-control mt-2" placeholder="Skelbimas"></textarea>
                             <input name="image" type="text" class="form-control mt-2" placeholder="Image">
+
                             <input type="number" name="price" class="form-control mt-2" placeholder="Kaina">
                             <select name="category_id" class="form-control mt-2">
                                 <option class="form-control">Pasirinkti kategorija</option>

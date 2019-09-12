@@ -10,4 +10,5 @@ class Attribute_set extends Model
     {
         return $this->hasMany('App\Attributes_set_relations', 'attribute_set_id', 'id');
     }
+
 }

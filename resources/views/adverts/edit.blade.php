@@ -31,9 +31,8 @@
 
 
                             @foreach($attributes as $attribute)
-                                <input name="title" type="text" class="form-control mt-2"  placeholder="{{$attribute->attributes->name}}" value="{{ucfirst($attribute->attributes->name)}}">
+                                <input name="super_attributes_{{$attribute->attributes->name}}" type="{{$attribute->attributes->type->name}}" class="form-control mt-2"  placeholder="{{ucfirst($attribute->attributes->label)}}">
                             @endforeach
-
 
                             <select name="active" class="form-control mt-2" required>
                                 <option class="form-control">Choose status</option>

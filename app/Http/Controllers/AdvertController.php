@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Attribute_set;
+use App\Attribute_values;
+use App\Attributes;
 use App\Category;
 use App\Advert;
 use App\Comments;
-use Illuminate\Http\Request;
+use App\User;use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Constraint\Attribute;
 
 
 class AdvertController extends Controller
@@ -84,7 +87,8 @@ class AdvertController extends Controller
     {
         //$advert = Advert::where('slug', $slug)->first();
         $data['advert'] = $advert;
-
+        //$data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
+        $data['attributes'] = $advert->attributeSet->relations;
         $data['comments'] = Comments::where('active', 1)->where('advert_id', $advert->id)->get();
 
         return view('adverts.single', $data);
@@ -103,7 +107,8 @@ class AdvertController extends Controller
         $categories = Category::where('active', 1)->get();
         $attribute_set = Attribute_set::all();
         $data['attributes'] = $advert->attributeSet->relations;
-        
+
+
         $data['advert'] = $advert;
         $data['categories'] = $categories;
         $data['attribute_set'] = $attribute_set;
@@ -120,6 +125,34 @@ class AdvertController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data  = $request->except('_token');
+
+        $attributes = [];
+        foreach ($data as $key => $single){
+            if(strpos($key, 'super_attributes_' )!== false){
+                $attributeName = str_replace('super_attributes_', '', $key);
+                $attributes[$attributeName] = $single;
+            }
+        }
+
+        foreach ($attributes as $name => $value){
+            $attributeObject = Attributes::where('name', $name)->first();
+            $oldValue = Attribute_values::where('attribute_id',$attributeObject->id)
+                ->where('advert_id',$id)->first();
+            if(!is_null($value)){
+                if($oldValue === null){
+                    $newValue = new Attribute_values();
+                    $newValue->attribute_id = $attributeObject->id;
+                    $newValue->advert_id = $id;
+                    $newValue->value = $value;
+                    $newValue->save();
+                }else{
+                    $oldValue->value = $value;
+                    $oldValue->save();
+                }
+            }
+        }
+
         //Uzkrauna i duomenu baze
         $user = auth()->user();
         $advert = Advert::find($id);
@@ -134,8 +167,7 @@ class AdvertController extends Controller
         $advert->slug = Str::slug($request->title, '-');
         $advert->attribute_set_id = $request->attribute_id;
         $advert->save();
-        //$data['advert'] = $advert;
-        //return view('adverts.single', $data);
+
         return redirect()->action('AdvertController@show', $advert->slug);
     }
 

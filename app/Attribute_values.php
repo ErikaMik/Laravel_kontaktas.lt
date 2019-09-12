@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attribute_values extends Model
 {
-    //
+    public function attribute()
+    {
+        return $this->hasOne('App\Attributes', 'id', 'attribute_id');
+    }
 }

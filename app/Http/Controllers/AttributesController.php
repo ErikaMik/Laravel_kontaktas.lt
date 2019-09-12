@@ -8,6 +8,6 @@ class AttributesController extends Controller
 {
     public function index()
     {
-        
+
     }
 }
