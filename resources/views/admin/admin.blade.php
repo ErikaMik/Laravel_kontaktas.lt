@@ -30,6 +30,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('message.create')}}">Create message</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('attributes.index')}}">Create attributes</a>
+                            </li>
                         </ul>
                     </div>
                 </nav>

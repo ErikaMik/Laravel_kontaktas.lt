@@ -43,3 +43,7 @@ Route::get('message/store', 'MessageController@store')->name('message.store');
 Route::get('user/message/{id}', 'MessageController@show')->name('message.show');
 Route::get('user/messages', 'MessageController@index')->name('messages.index');
 
+Route::get('attributes', 'AttributesController@index')->name('attributes.index');
+Route::get('attributes/storeset', 'AttributesController@storeSet')->name('attributes.storeSet');
+Route::get('attributes/storeattribute', 'AttributesController@storeAttribute')->name('attributes.storeAttribute');
+

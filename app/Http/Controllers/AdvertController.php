@@ -87,8 +87,8 @@ class AdvertController extends Controller
     {
         //$advert = Advert::where('slug', $slug)->first();
         $data['advert'] = $advert;
-        //$data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
-        $data['attributes'] = $advert->attributeSet->relations;
+        $data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
+        //$data['attributes'] = $advert->attributeSet->relations;
         $data['comments'] = Comments::where('active', 1)->where('advert_id', $advert->id)->get();
 
         return view('adverts.single', $data);
@@ -164,7 +164,7 @@ class AdvertController extends Controller
         $advert->price = $request->price;
         $advert->image = $request->image;
         $advert->active = $request->active;
-        $advert->slug = Str::slug($request->title, '-');
+        $advert->slug = Str::slug($request->title, '-').'-'.$id;
         $advert->attribute_set_id = $request->attribute_id;
         $advert->save();
 
