@@ -61,7 +61,7 @@
                         @include('pages.menu.categories')
                         @role('admin|user')
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('advert.create') }}">{{ __('Kurti skelbima') }}</a>
+                            <a class="nav-link" href="{{ route('advert.advertcreate') }}">{{ __('Kurti skelbima') }}</a>
                         </li>
                         @endrole
                         @guest

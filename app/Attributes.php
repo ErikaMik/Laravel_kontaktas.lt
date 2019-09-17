@@ -15,4 +15,5 @@ class Attributes extends Model
     {
         return $this->hasOne('App\Attribute_values', 'attribute_id', 'id');
     }
+
 }

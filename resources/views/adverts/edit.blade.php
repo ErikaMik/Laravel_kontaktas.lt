@@ -25,13 +25,15 @@
                             <select name="attribute_id" class="form-control mt-2" required>
                                 <option class="form-control">Atributai</option>
                                 @foreach($attribute_set as $set)
-                                    <option value="{{ $set->id }}">{{$set->name}}</option>
+                                    <option value="{{ $set->id }}" {{ ( $set->id == $advert->attribute_set_id) ? 'selected' : '' }}>{{$set->name}}</option>
                                 @endforeach
                             </select>
 
 
                             @foreach($attributes as $attribute)
-                                <input name="super_attributes_{{$attribute->attributes->name}}" type="{{$attribute->attributes->type->name}}" class="form-control mt-2"  placeholder="{{ucfirst($attribute->attributes->label)}}">
+                                @foreach($values as $value)
+                                {{$value->attribute->label}}<input name="super_attributes_{{$attribute->attributes->name}}" type="{{$attribute->attributes->type->name}}" class="form-control mt-2"  placeholder="{{ucfirst($value->attribute->label)}}" value="{{$value->value}}">
+                                @endforeach
                             @endforeach
 
                             <select name="active" class="form-control mt-2" required>

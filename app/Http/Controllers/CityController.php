@@ -42,10 +42,15 @@ class CityController extends Controller
      */
     public function store(Request $request)
     {
-        if(!is_null($request->city)){
+        $oldValue = City::where('name', $request->city)->first();;
+        if(!is_null($request->city) && $oldValue === null){
             $city = new City();
             $city->name = $request->city;
             $city->save();
+        }else{
+            if(!is_null($request->city)){
+                $oldValue->name = $request->city;
+            }
         }
         return redirect()->back();
     }

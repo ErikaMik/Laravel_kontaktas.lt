@@ -1,59 +1,5 @@
 @extends('layouts.app')
-<style>
 
-    /*https://html-cleaner.com/features/replace-html-table-tags-with-divs/*/
-    /*.rTable {*/
-        /*display: table;*/
-        /*width: 50%;*/
-    /*}*/
-    /*.rTableRow {*/
-        /*display: table-row;*/
-    /*}*/
-    /*.rTableHeading {*/
-        /*display: table-header-group;*/
-        /*background-color: #ddd;*/
-    /*}*/
-    /*.rTableCell, .rTableHead {*/
-        /*display: table-cell;*/
-        /*padding: 3px 10px;*/
-        /*border: 1px solid #999999;*/
-        /*width: 50%;*/
-    /*}*/
-    /*.rTableHeading {*/
-        /*display: table-header-group;*/
-        /*background-color: #ddd;*/
-        /*font-weight: bold;*/
-    /*}*/
-    /*.rTableFoot {*/
-        /*display: table-footer-group;*/
-        /*font-weight: bold;*/
-        /*background-color: #ddd;*/
-    /*}*/
-    /*.rTableBody {*/
-        /*display: table-row-group;*/
-    /*}*/
-
-    .rTable { display: table; }
-    .rTableRow { display: table-row; }
-    .rTableHeading { display: table-header-group; }
-    .rTableBody { display: table-row-group; }
-    .rTableFoot { display: table-footer-group; }
-    .rTableCell, .rTableHead { display: table-cell; }
-
-
-    #main {
-
-        display: flex;
-    }
-
-    #main div {
-        flex-grow: 0;
-        flex-shrink: 0;
-        /*flex-basis: 40px;*/
-    }
-
-
-</style>
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -98,62 +44,19 @@
                         </form>
                     </div>
                 </div>
-
-
                 <form method="post" action="{{route('city.clear')}}">
                     @csrf
-                    <button type="submit" class="btn btn-dark btn-sm" >Delete checked</button>
+                    <div class="text-right"><button type="submit" class="btn btn-dark btn-sm mt-2 p-2">Delete selected</button></div>
                     @foreach($cities as $city)
-                        <div class="rTableRow">
-                            <div class="rTableCell"><input name="post[]" type="checkbox" value="{{$city->id}}"></div>
-                        </div>
-                        <div class="rTableRow">
-                            <div class="rTableCell">{{$city->name}}</div>
-                            <div class="rTableCell">
-                                <a href="#" type="submit" role="button"  class="btn btn-dark btn-sm">
-                                    EDIT
-                                </a>
+
+                            <div class="col-md-8">
+                                <label for="{{$city->id}}">
+                                <h4 class="card-title mt-3 pl-2 pr-2"><input name="post[]" type="checkbox" id="{{$city->id}}" value="{{$city->id}}" class="mr-2">{{$city->name}}</h4>
+                                </label>
                             </div>
-                        </div>
+
                     @endforeach
                 </form>
-
-
-
-
-
-        {{--<div id="main">--}}
-                {{--<div>--}}
-                    {{--<form method="post" action="{{route('city.clear')}}">--}}
-                        {{--@csrf--}}
-                        {{--<button type="submit" class="btn btn-dark btn-sm" >Delete checked</button>--}}
-                        {{--@foreach($cities as $city)--}}
-                            {{--<div class="rTableRow">--}}
-                                {{--<div class="rTableCell"><input name="post[]" type="checkbox" value="{{$city->id}}"></div>--}}
-                            {{--</div>--}}
-                        {{--@endforeach--}}
-                    {{--</form>--}}
-                {{--</div>--}}
-                {{--<div>--}}
-                    {{--@foreach($cities as $city)--}}
-                        {{--<div class="rTableRow">--}}
-                            {{--<div class="rTableCell">{{$city->name}}</div>--}}
-                                {{--<div class="rTableCell">--}}
-                                    {{--<a href="#" type="submit" role="button"  class="btn btn-dark btn-sm">--}}
-                                        {{--EDIT--}}
-                                    {{--</a>--}}
-                                {{--</div>--}}
-                            {{--<div class="rTableCell">--}}
-                            {{--<form method="post" action="{{route('city.destroy', $city->id)}}">--}}
-                                {{--@csrf--}}
-                                {{--@method('DELETE')--}}
-                                {{--<button type="submit" class="btn btn-dark btn-sm" onclick="return confirm('Are you sure?')">Delete</button>--}}
-                            {{--</form>--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                    {{--@endforeach--}}
-                {{--</div>--}}
-        {{--</div>--}}
             </div>
         </div>
     </div>

@@ -21,7 +21,8 @@
                                     </div>
                                     <div class="card-footer">
                                         <small>Kaina: {{ $advert-> price}} €</small>
-                                        <a href="http://194.5.157.97/laravel/test/public/advert/{{$advert->slug}}" class="btn btn-dark float-right btn-sm">show</a>
+                                        {{--<a href="http://194.5.157.97/laravel/test/public/advert/{{$advert->slug}}" class="btn btn-dark float-right btn-sm">show</a>--}}
+                                        <a href="{{route('advert.show', $advert->slug)}}" class="btn btn-dark float-right btn-sm">show</a>
                                     </div>
                                 </div>
                             </div>

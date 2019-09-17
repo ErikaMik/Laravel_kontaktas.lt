@@ -38,8 +38,5 @@ class Advert extends Model
         return $this->hasOne('App\Attribute_set', 'id', 'attribute_set_id' );
     }
 
-    public function value()
-    {
-        return $this->hasOne('App\Attribute_values', 'advert_id', 'id');
-    }
+
 }

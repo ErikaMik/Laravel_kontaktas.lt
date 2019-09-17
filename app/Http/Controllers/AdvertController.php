@@ -33,6 +33,19 @@ class AdvertController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function advertCreate()
+    {
+        $user = Auth::user();
+        if($user && ($user->hasRole('admin') || $user->hasRole('user'))){
+            $data['categories'] = Category::where('active', 1)->get();
+            $data['attribute_set'] = Attribute_set::all();
+            return view('adverts.advertcreate', $data);
+        }else{
+            return view('auth.login');
+        }
+    }
+
     public function create()
     {
         $user = Auth::user();
@@ -40,6 +53,8 @@ class AdvertController extends Controller
         {
             $categories = Category::where('active', 1)->get();
             $data['categories'] = $categories;
+            $attribute_set = Attribute_set::all();
+            $data['attribute_set'] = $attribute_set;
             //dd($categories); debuginimas
             return view('adverts.create', $data);
         }else{
@@ -88,7 +103,8 @@ class AdvertController extends Controller
         //$advert = Advert::where('slug', $slug)->first();
         $data['advert'] = $advert;
         $data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
-        //$data['attributes'] = $advert->attributeSet->relations;
+        //dd($data['values']);
+        $data['attributes'] = $advert->attributeSet->relations;
         $data['comments'] = Comments::where('active', 1)->where('advert_id', $advert->id)->get();
 
         return view('adverts.single', $data);
@@ -107,6 +123,7 @@ class AdvertController extends Controller
         $categories = Category::where('active', 1)->get();
         $attribute_set = Attribute_set::all();
         $data['attributes'] = $advert->attributeSet->relations;
+        $data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
 
 
         $data['advert'] = $advert;
