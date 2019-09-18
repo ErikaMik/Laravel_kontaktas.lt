@@ -23,10 +23,12 @@ Auth::routes();
 //Route::resource('advert', 'AdvertController');
 Route::get('advert/advertcreate', 'AdvertController@advertCreate')->name('advert.advertcreate');
 Route::get('advert/store', 'AdvertController@store')->name('advert.store');
+Route::post('advert/initializeAd', 'AdvertController@initializeAd')->name('advert.initializeAd');
 Route::get('advert/destroy', 'AdvertController@destroy')->name('advert.destroy');
-Route::get('advert/{slug}', 'AdvertController@show')->name('advert.show');
+Route::get('advert/create', 'AdvertController@create')->name('advert.create');
+Route::get('advert/{advert}', 'AdvertController@show')->name('advert.show');
 Route::get('advert/{id}/edit', 'AdvertController@edit')->name('advert.edit');
-Route::get('advert/update', 'AdvertController@update')->name('advert.update');
+Route::post('advert/update/{id}', 'AdvertController@update')->name('advert.update');
 
 Route::resource('category', 'CategoryController');
 Route::resource('categories', 'CategoryController');
@@ -50,5 +52,5 @@ Route::get('attributes', 'AttributesController@index')->name('attributes.index')
 Route::get('attributes/storeset', 'AttributesController@storeSet')->name('attributes.storeSet');
 Route::get('attributes/storeattribute', 'AttributesController@storeAttribute')->name('attributes.storeAttribute');
 
-Route::get('/api/subscribers', 'Api\SubscribersController@index');
+
 

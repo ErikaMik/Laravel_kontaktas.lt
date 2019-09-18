@@ -8,7 +8,7 @@
                     <div class="card-header">Sukurti skelbimą</div>
 
                     <div class="card-body">
-                        <form method="post" action="{{route('advert.store')}}">
+                        <form method="post" action="{{route('advert.initializeAd')}}">
                             @csrf {{--neleidzia submitint formos is kito saito--}}
                             <input name="title" type="text" class="form-control mt-2"  placeholder="Pavadinimas">
                             <select name="category_id" class="form-control mt-2">

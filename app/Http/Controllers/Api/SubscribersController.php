@@ -25,9 +25,9 @@ class SubscribersController extends Controller
 
     }
 
-    public function delete(Request $request)
+    public function delete($email)
     {
-        $subscriber = Subscriber::where('email', $request->email)->first();
+        $subscriber = Subscriber::where('email', $email)->first();
         $subscriber->delete();
     }
 }

@@ -46,6 +46,23 @@ class AdvertController extends Controller
         }
     }
 
+//    public function create()
+//    {
+//        $user = Auth::user();
+//        if($user && ($user->hasRole('admin') || $user->hasRole('user')))
+//        {
+//            $categories = Category::where('active', 1)->get();
+//            $data['categories'] = $categories;
+//            $attribute_set = Attribute_set::all();
+//            $data['attribute_set'] = $attribute_set;
+//            //dd($categories); debuginimas
+//            return view('adverts.create', $data);
+//        }else{
+//            return view('auth.login');
+//        }
+//
+//    }
+
     public function create()
     {
         $user = Auth::user();
@@ -90,6 +107,29 @@ class AdvertController extends Controller
         return redirect()->action('AdvertController@show', $advert->slug);
     }
 
+    public function initializeAd(Request $request)
+    {
+        $user = auth()->user();
+        $advert = new Advert();
+        $advert->title = $request->title;
+        $advert->content = '';
+        $advert->category_id = $request->category_id;
+        $advert->attribute_set_id = $request->attribute_id;
+        $advert->city_id = 1;
+        $advert->user_id = $user->id;
+        $advert->price = null;
+        $advert->image = null;
+        $advert->active = 0;
+
+        $lastid = Advert::all()->last();
+        $id = $lastid->id;
+        $id = $id + 1;
+
+        $advert->slug = Str::slug($request->title, '-').'-'.$id;
+        $advert->save();
+        return redirect()->action('AdvertController@edit', $advert->id);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -100,10 +140,8 @@ class AdvertController extends Controller
 
     public function show(Advert $advert)
     {
-        //$advert = Advert::where('slug', $slug)->first();
         $data['advert'] = $advert;
         $data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
-        //dd($data['values']);
         $data['attributes'] = $advert->attributeSet->relations;
         $data['comments'] = Comments::where('active', 1)->where('advert_id', $advert->id)->get();
 
@@ -143,7 +181,7 @@ class AdvertController extends Controller
     public function update(Request $request, $id)
     {
         $data  = $request->except('_token');
-
+        //dd($data);
         $attributes = [];
         foreach ($data as $key => $single){
             if(strpos($key, 'super_attributes_' )!== false){
@@ -154,6 +192,7 @@ class AdvertController extends Controller
 
         foreach ($attributes as $name => $value){
             $attributeObject = Attributes::where('name', $name)->first();
+            //dd($attributes);
             $oldValue = Attribute_values::where('attribute_id',$attributeObject->id)
                 ->where('advert_id',$id)->first();
             if(!is_null($value)){
