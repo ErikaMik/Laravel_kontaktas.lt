@@ -46,67 +46,6 @@ class AdvertController extends Controller
         }
     }
 
-//    public function create()
-//    {
-//        $user = Auth::user();
-//        if($user && ($user->hasRole('admin') || $user->hasRole('user')))
-//        {
-//            $categories = Category::where('active', 1)->get();
-//            $data['categories'] = $categories;
-//            $attribute_set = Attribute_set::all();
-//            $data['attribute_set'] = $attribute_set;
-//            //dd($categories); debuginimas
-//            return view('adverts.create', $data);
-//        }else{
-//            return view('auth.login');
-//        }
-//
-//    }
-
-    public function create()
-    {
-        $user = Auth::user();
-        if($user && ($user->hasRole('admin') || $user->hasRole('user')))
-        {
-            $categories = Category::where('active', 1)->get();
-            $data['categories'] = $categories;
-            $attribute_set = Attribute_set::all();
-            $data['attribute_set'] = $attribute_set;
-            //dd($categories); debuginimas
-            return view('adverts.create', $data);
-        }else{
-            return view('auth.login');
-        }
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $user = auth()->user();
-        $advert = new Advert();
-        $advert->title = $request->title;
-        $advert->content = $request->content_text;
-        $advert->category_id = $request->category_id;
-        $advert->city_id = 1;
-        $advert->user_id = $user->id;
-        $advert->price = $request->price;
-        $advert->image = $request->image;
-
-        $lastid = Advert::all()->last();
-        $id = $lastid->id;
-        $id = $id + 1;
-
-        $advert->slug = Str::slug($request->title, '-').'-'.$id;
-        $advert->save();
-        return redirect()->action('AdvertController@show', $advert->slug);
-    }
-
     public function initializeAd(Request $request)
     {
         $user = auth()->user();
@@ -127,61 +66,26 @@ class AdvertController extends Controller
 
         $advert->slug = Str::slug($request->title, '-').'-'.$id;
         $advert->save();
-        return redirect()->action('AdvertController@edit', $advert->id);
+        return redirect()->action('AdvertController@editAd', $advert->id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-
-
-    public function show(Advert $advert)
+    public function editAd($id)
     {
-        $data['advert'] = $advert;
-        $data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
-        $data['attributes'] = $advert->attributeSet->relations;
-        $data['comments'] = Comments::where('active', 1)->where('advert_id', $advert->id)->get();
-
-        return view('adverts.single', $data);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //uzkrauna forma editinimui
+        //ad content input
         $advert = Advert::find($id);
         $categories = Category::where('active', 1)->get();
         $attribute_set = Attribute_set::all();
         $data['attributes'] = $advert->attributeSet->relations;
         $data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
-
-
         $data['advert'] = $advert;
         $data['categories'] = $categories;
         $data['attribute_set'] = $attribute_set;
-
-        return view('adverts.edit', $data);
+        return view('adverts.createadd', $data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function createAd(Request $request, $id)
     {
         $data  = $request->except('_token');
-        //dd($data);
         $attributes = [];
         foreach ($data as $key => $single){
             if(strpos($key, 'super_attributes_' )!== false){
@@ -192,7 +96,6 @@ class AdvertController extends Controller
 
         foreach ($attributes as $name => $value){
             $attributeObject = Attributes::where('name', $name)->first();
-            //dd($attributes);
             $oldValue = Attribute_values::where('attribute_id',$attributeObject->id)
                 ->where('advert_id',$id)->first();
             if(!is_null($value)){
@@ -221,9 +124,163 @@ class AdvertController extends Controller
         $advert->image = $request->image;
         $advert->active = $request->active;
         $advert->slug = Str::slug($request->title, '-').'-'.$id;
-        $advert->attribute_set_id = $request->attribute_id;
+        //$advert->attribute_set_id = $advert->attribute_set_id;
         $advert->save();
 
+        return redirect()->action('AdvertController@show', $advert->slug);
+    }
+
+//    public function create()
+//    {
+//        $user = Auth::user();
+//        if($user && ($user->hasRole('admin') || $user->hasRole('user')))
+//        {
+//            $categories = Category::where('active', 1)->get();
+//            $data['categories'] = $categories;
+//            $attribute_set = Attribute_set::all();
+//            $data['attribute_set'] = $attribute_set;
+//            //dd($categories); debuginimas
+//            return view('adverts.create', $data);
+//        }else{
+//            return view('auth.login');
+//        }
+//
+//    }
+
+//    public function create()
+//    {
+//        $user = Auth::user();
+//        if($user && ($user->hasRole('admin') || $user->hasRole('user')))
+//        {
+//            $categories = Category::where('active', 1)->get();
+//            $data['categories'] = $categories;
+//            $attribute_set = Attribute_set::all();
+//            $data['attribute_set'] = $attribute_set;
+//            //dd($categories); debuginimas
+//            return view('adverts.create', $data);
+//        }else{
+//            return view('auth.login');
+//        }
+//
+//    }
+//
+//    /**
+//     * Store a newly created resource in storage.
+//     *
+//     * @param  \Illuminate\Http\Request  $request
+//     * @return \Illuminate\Http\Response
+//     */
+//    public function store(Request $request)
+//    {
+//        $user = auth()->user();
+//        $advert = new Advert();
+//        $advert->title = $request->title;
+//        $advert->content = $request->content_text;
+//        $advert->category_id = $request->category_id;
+//        $advert->city_id = 1;
+//        $advert->user_id = $user->id;
+//        $advert->price = $request->price;
+//        $advert->image = $request->image;
+//
+//        $lastid = Advert::all()->last();
+//        $id = $lastid->id;
+//        $id = $id + 1;
+//
+//        $advert->slug = Str::slug($request->title, '-').'-'.$id;
+//        $advert->save();
+//        return redirect()->action('AdvertController@show', $advert->slug);
+//    }
+
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function show(Advert $advert)
+    {
+        $data['advert'] = $advert;
+        $data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
+        $data['attributes'] = $advert->attributeSet->relations;
+        $data['comments'] = Comments::where('active', 1)->where('advert_id', $advert->id)->get();
+
+        return view('adverts.single', $data);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    // Edit for active ads
+    public function edit($id)
+    {
+        //editing form
+        $advert = Advert::find($id);
+        $categories = Category::where('active', 1)->get();
+        $attribute_set = Attribute_set::all();
+        $data['attributes'] = $advert->attributeSet->relations;
+        $data['values'] = Attribute_values::where('advert_id', $advert->id)->get();
+        $data['advert'] = $advert;
+        $data['categories'] = $categories;
+        $data['attribute_set'] = $attribute_set;
+        return view('adverts.edit', $data);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    // update for active ads
+    public function update(Request $request, $id)
+    {
+        $data  = $request->except('_token');
+        $attributes = [];
+        foreach ($data as $key => $single){
+            if(strpos($key, 'super_attributes_' )!== false){
+                $attributeName = str_replace('super_attributes_', '', $key);
+                $attributes[$attributeName] = $single;
+            }
+        }
+        foreach ($attributes as $name => $value){
+            $attributeObject = Attributes::where('name', $name)->first();
+            $oldValue = Attribute_values::where('attribute_id',$attributeObject->id)
+                ->where('advert_id',$id)->first();
+            if(!is_null($value)){
+                if($oldValue === null){
+                    $newValue = new Attribute_values();
+                    $newValue->attribute_id = $attributeObject->id;
+                    $newValue->advert_id = $id;
+                    $newValue->value = $value;
+                    $newValue->save();
+                }else{
+                    $oldValue->value = $value;
+                    $oldValue->save();
+                }
+            }
+        }
+        //Uzkrauna i duomenu baze
+        $user = auth()->user();
+        $advert = Advert::find($id);
+        $advert->title = $request->title;
+        $advert->content = $request->content_text;
+        $advert->category_id = $request->category_id;
+        $advert->city_id = 1;
+        $advert->user_id = $user->id;
+        $advert->price = $request->price;
+        $advert->image = $request->image;
+        $advert->active = $request->active;
+        $advert->slug = Str::slug($request->title, '-').'-'.$id;
+        $advert->attribute_set_id = $request->attribute_id;
+        $advert->save();
         return redirect()->action('AdvertController@show', $advert->slug);
     }
 
@@ -242,5 +299,33 @@ class AdvertController extends Controller
         if($user && ($user->hasRole('admin'))){
             return redirect()->action('AdminController@index');
         }else{return redirect()->action('HomeController@index');}
+    }
+
+
+    public function destroyMany($id)
+    {
+        if (is_array($id)) {
+            Advert::destroy($id);
+            return redirect()->back();
+        } else {
+            Advert::findOrFail($id)->delete();
+            return redirect()->back();
+        }
+    }
+
+    public function deletePermanent(Request $request)
+    {
+        $post = $request->input('post');
+        //dd($post);
+        if (is_array($post))
+        {
+            Advert::destroy($post);
+            return redirect()->back();
+        }
+        else
+        {
+            Advert::findOrFail($post)->delete();
+            return redirect()->back();
+        }
     }
 }

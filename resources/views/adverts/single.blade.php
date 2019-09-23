@@ -18,8 +18,8 @@
                                     </form>
                                     <form method="post" action="{{action('AdvertController@destroy', $advert->id)}}">
                                         @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-dark float-right btn-sm">Delete</button>
+                                        @method('GET')
+                                        <button type="submit" class="btn btn-dark float-right btn-sm" onclick="return confirm('Ar tikrai norite ištrinti skelbimą')">Delete</button>
                                     </form>
                                 @endif
                             {{--@endrole--}}
@@ -27,6 +27,12 @@
                     </div>
                 </div>
                 <div class="alert">Kategorija: {{$advert->category->title}}</div>
+                <div class="card-body d-flex">
+                    {{--<div class="d-flex">--}}
+                        <div class="card-columns">Sukurta: {{$advert->created_at->format('Y-d-m')}}</div>
+                        <div class="card-columns">Atnaujinta: {{$advert->updated_at->format('Y-d-m')}}</div>
+                    {{--</div>--}}
+                </div>
                 <div class="card-body">
                     <div class="text-left">{{ $advert-> content}}</div>
                     <div class="card-columns mt-4">Kaina: {{ $advert->price}} €</div>

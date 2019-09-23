@@ -3,8 +3,8 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="card col bg-dark">
+                <nav class="navbar navbar-expand-lg navbar-dark ">
                     <a class="navbar-brand" href="http://194.5.157.97/laravel/test/public/admin">Admin</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -36,41 +36,40 @@
                         </ul>
                     </div>
                 </nav>
-
-
-                <table class="table">
-                    <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Content</th>
-                        <th>Image</th>
-                        <th>Active</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                    @foreach($adverts as $advert)
-                    <tr>
-                        <td><input name="post[]" type="checkbox" value="{{$advert->id}}"></td>
-                        <td>{{$advert->title}}</td>
-                        <td width="400px">{{ Str::words($advert->content, 10, '...')}}</td>
-                        <td><img src="{{$advert->image}}" width="150px"></td>
-                        <td>{{($advert->active == 1) ? "Active" : "Disabled"}}</td>
-                        <td>
-                            <a href="{{url('advert/'.$advert->id.'/edit')}}" type="submit" role="button"  class="btn btn-dark btn-sm">
-                            EDIT
-                            </a>
-                        </td>
-                        <td>
-                            <form method="post" action="{{action('AdvertController@destroy', $advert->id)}}">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-dark btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
             </div>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-8">
+            <form method="post" action="{{route('advert.deletePermanent')}}">
+                @csrf
+                <div ><button type="submit" class="btn btn-dark btn-sm mt-2 p-2" onclick="return confirm('Are you sure you want to delete these ads?')">DELETE selected</button></div>
+            @foreach($adverts as $advert)
+            <div class="card mt-2" style="background-color:{{($advert->active == 0)?  '#CDCDCD;' : ''}}">
+                <div class="row align-items-center h-100">
+                <div class="col-auto m-2">
+                    <input name="post[]" type="checkbox"  value="{{$advert->id}}">
+                </div>
+                <div class="col m-2">
+                    {{$advert->title}}<br>{{$advert->created_at}}
+                </div>
+                    <div class="col m-2">{{ Str::words($advert->content, 10, '...')}}</div>
+                <div class="col col-auto m-2"><a href="http://194.5.157.97/laravel/test/public/advert/{{$advert->slug}}"><img src="{{$advert->image}}" width="150px"></a></div>
+                <div class="col col-auto m-2">{{($advert->active == 1) ? "Active" : "Disabled"}}</div>
+                <div class="col col-auto m-2">
+                    <a href="{{url('advert/'.$advert->id.'/edit')}}" type="submit" role="button"  class="btn btn-dark btn-sm">
+                        EDIT
+                    </a>
+                    <a href="{{url('advert/destroy/'.$advert->id)}}" type="submit" role="button"  class="btn btn-dark btn-sm ml-2">
+                        DISABLE
+                    </a>
+                </div>
+                </div>
+            </div>
+            @endforeach
+            </form>
         </div>
     </div>
 @endsection

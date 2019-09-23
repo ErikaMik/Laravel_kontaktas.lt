@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     public function adverts(){
-    return $this->hasMany('App\Advert', 'category_id', 'id');
+    return $this->hasMany('App\Advert', 'category_id', 'id')->active();
     }
 
     public function subCategory(){
